@@ -1,4 +1,5 @@
 import math
+import re
 
 def mediana(x):
     if x == []: raise ValueError("lista invalida")
@@ -23,9 +24,9 @@ def quartis(x, largura=50, raw=False):
         q3 = mediana(x[meio+1:])
     
     print(f"lista{x}")
-    
-    minimo = x[0]
-    maximo = x[-1]
+
+    minimo = q1 - 1.5*(q3-q1)
+    maximo = q3 + 1.5*(q3-q1)
 
     if raw:
         return f"min: {minimo:.2f}, q1: {q1:.2f}, q2: {q2:.2f}, q3: {q3:.2f}, max: {maximo:.2f}"
@@ -66,3 +67,19 @@ def quartis(x, largura=50, raw=False):
                 linha_valores[i + j] = ch
 
     return "".join(linha_valores)
+
+def atipicos(x):
+    atipicos = []
+    match = re.search(r"min: (-?\d+\.?\d*),.*max: (-?\d+\.?\d*)", quartis(x, raw=True))
+
+    if not match:
+        return []
+
+    minimo = float(match.group(1))
+    maximo = float(match.group(2))
+
+    for num in x:
+        if num > maximo or num < minimo:
+            atipicos.append(num)
+
+    return atipicos
