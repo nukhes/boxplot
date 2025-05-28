@@ -1,1 +1,1 @@
-from .boxplot import mediana, quartis
+from .boxplot import mediana, quartis, atipicos
